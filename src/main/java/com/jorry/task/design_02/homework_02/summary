@@ -1,0 +1,17 @@
+1. 反射破坏
+虽然单例类的构造方法私有化，但是能通过反射强吻方式，能获取到该对象实例，从而破坏单例规则
+
+-> 解决：构造方法加入判断
+// 为了解决反射破坏单例
+if (LazyHolder.lazy != null) {
+    throw new RuntimeException("不允许实例多个对象");
+}
+
+
+2. 序列化破坏
+通过序列化的形式写入(FileOutputStream)到磁盘，在通过反序列化的方式读取（FileInputStream），在转换成对象
+
+-> 解决：重写 readResolve() 方法
+FileInputStream fis = new FileInputStream("xxxxx");
+ObjectInputStream ois = new ObjectInputStream(fis);
+ois.readObject();
